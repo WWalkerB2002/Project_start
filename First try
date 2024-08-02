@@ -1,0 +1,22 @@
+import requests
+import argparse
+
+def get_crypto_price(crypto_id):
+    url = f'https://api.coingecko.com/api/v3/simple/price?ids={crypto_id}&vs_currencies=usd'
+    response = requests.get(url)
+    data = response.json()
+    return data[crypto_id]['usd']
+
+def main():
+    parser = argparse.ArgumentParser(description='Get cryptocurrency prices.')
+    parser.add_argument('crypto', type=str, help='The ID of the cryptocurrency (e.g., bitcoin, ethereum)')
+    args = parser.parse_args()
+
+    try:
+        price = get_crypto_price(args.crypto)
+        print(f'The current price of {args.crypto} is ${price}')
+    except KeyError:
+        print(f'Error: Cryptocurrency with ID "{args.crypto}" not found.')
+
+if __name__ == '__main__':
+    main()
